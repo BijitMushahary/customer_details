@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <User_Tracker>
+            <version>0.1.0</version>    <!-- Version of module -->
+        </User_Tracker>
+    </modules>
+    <frontend>
+        <routers>
+            <tracker>
+                <use>standard</use>
+                <args>
+                    <module>User_Tracker</module>
+                    <frontName>customers</frontName>  <!-- This is the URL
+ of the module. i.e www.yourmagento.com/index.php/test will be the url of your module. -->
+                </args>
+            </tracker>
+        </routers>
+        <layout>  <!-- New Section Added -->
+            <updates>
+                <tracker>
+                    <file>tracker.xml</file> <!-- This is name of the layout file for this module -->
+                </tracker>
+            </updates>
+        </layout>
+    </frontend>
+    <global>
+        <blocks>
+            <tracker>
+                <class>User_Tracker_Block</class>  <!-- Path of the
+ Block Folder, where all php files are located related to view -->
+            </tracker>
+        </blocks>
+        <helpers>
+            <tracker>
+                <class>User_Tracker_Helper</class> 
+<!-- Path of Helper Files -->
+            </tracker>
+        </helpers>
+    </global>
+
+    <global>
+       <models>
+           <User_Tracker>
+               <class>User_Tracker_Model</class>
+           </User_Tracker>
+       </models>
+       <events>
+           <!-- <checkout_onepage_save_order_after> -->
+           <!-- <checkout_onepage_controller_success_action> -->
+           <sales_order_place_after>
+               <observers>
+                   <User_Tracker>
+                       <type>singleton</type>
+                       <class>User_Tracker/observer</class>
+                       <!-- <method>customerLogin</method> -->
+                       <!-- <method>saveOrderAfter</method> -->
+                       <method>customOrderSave</method>
+                   </User_Tracker>
+               </observers>
+           </sales_order_place_after>
+           <!-- </checkout_onepage_save_order_after> -->
+           <!-- </checkout_onepage_controller_success_action> -->
+       </events>
+   </global>
+   <!--Added for database-->
+   <global>
+    <models>
+        <tracker>
+            <class>User_Tracker_Model</class> <!-- Location of all model class files -->
+            <resourceModel>tracker_mysql4</resourceModel> <!-- Location of resource model -->
+        </tracker>
+        <tracker_mysql4>
+            <class>User_Tracker_Model_Mysql4</class>
+            <entities>
+                <observer>
+                    <table>order_details</table>  <!-- Actual table name in sql  -->
+                </observer>
+            </entities>
+        </tracker_mysql4>
+    </models>
+    <resources>  <!-- These are resource setting giving access to module, read/write permission on database -->
+        <tracker_setup>
+            <setup>
+                <module>User_Tracker</module>
+            </setup>
+            <connection>
+                <use>core_setup</use>
+            </connection>
+        </tracker_setup>
+        <tracker_write>
+            <connection>
+                <use>core_write</use>
+            </connection>
+        </tracker_write>
+        <tracker_read>
+            <connection>
+                <use>core_read</use>
+            </connection>
+        </tracker_read>
+    </resources>
+ </global>
+ <!--xxxxxxxxxxxxxxxxxxxxxx-->
+
+</config>
